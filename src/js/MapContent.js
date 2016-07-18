@@ -19,7 +19,8 @@ function MapContent(){
             addMarkerEventListener();
         }
         else{
-            removeMarkerEventListener()
+            removeMarkerEventListener();
+            _this.polygonsContainer.createPolygon(_this.map);
         }
     };
     var addMarkerEventListener = function(){
