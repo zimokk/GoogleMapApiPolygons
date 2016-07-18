@@ -25,7 +25,26 @@ function PolygonsContainer(){
             });
             polygon.addListener('click', toggleActivity);
             polygon.setMap(map);
+            _this.all.push(polygon);
         }
+    };
+    _this.deleteActivePolygon = function(){
+        if(_this.active){
+            var index = _this.all.indexOf(_this.active);
+            if (index > -1) {
+                _this.all.splice(index, 1);
+            }
+            _this.active.setMap(null);
+            _this.active = null;
+            debugger
+        }
+    };
+    _this.deleteAllPolygons = function(){
+        _this.all.forEach(function(polygon, number, polygons){
+            polygon.setMap(null);
+        });
+        _this.all = null;
+        _this.active = null;
     };
     var toggleActivity = function(){
         var unsetActive = function(){
@@ -66,5 +85,5 @@ function PolygonsContainer(){
         });
         removeMarkers();
         return coords;
-    }
+    };
 }

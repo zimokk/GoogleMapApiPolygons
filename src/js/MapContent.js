@@ -2,7 +2,7 @@ function MapContent(){
     var _this = this;
     _this.map;
     _this.infoWindow;
-    _this.polygonsContainer = new PolygonsContainer();
+    var polygonsContainer = new PolygonsContainer();
 
     var markerEventListener = null;
 
@@ -20,12 +20,18 @@ function MapContent(){
         }
         else{
             removeMarkerEventListener();
-            _this.polygonsContainer.createPolygon(_this.map);
+            polygonsContainer.createPolygon(_this.map);
         }
+    };
+    _this.deletePolygon = function(){
+        polygonsContainer.deleteActivePolygon();
+    };
+    _this.deleteAllPolygons = function(){
+        polygonsContainer.deleteAllPolygons();
     };
     var addMarkerEventListener = function(){
         markerEventListener = google.maps.event.addListener(_this.map, 'click', function(event) {
-            _this.polygonsContainer.addMarker(event.latLng, _this.map);
+            polygonsContainer.addMarker(event.latLng, _this.map);
         });
     };
     var removeMarkerEventListener = function(){

@@ -4,4 +4,10 @@ $(document).ready(function(){
     $("button#add").click(function(){
         mapContent.toggleMarkerListener();
     });
+    $("button#delete").click(function(){
+        mapContent.deletePolygon();
+    });
+    $("button#deleteAll").click(function(){
+        mapContent.deleteAllPolygons();
+    })
 });
