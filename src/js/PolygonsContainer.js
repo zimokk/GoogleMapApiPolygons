@@ -36,14 +36,13 @@ function PolygonsContainer(){
             }
             _this.active.setMap(null);
             _this.active = null;
-            debugger
         }
     };
     _this.deleteAllPolygons = function(){
         _this.all.forEach(function(polygon, number, polygons){
             polygon.setMap(null);
         });
-        _this.all = null;
+        _this.all = [];
         _this.active = null;
     };
     var toggleActivity = function(){
