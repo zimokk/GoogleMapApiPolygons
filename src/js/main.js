@@ -1,5 +1,5 @@
 (function( $ ){
-    $.fn.initMap = function() {
+    $.fn.initGoogleMap = function() {
         this.each(function(){
             var mapContent = new MapContent(this);
             mapContent.initMap();
@@ -13,11 +13,18 @@
             var buttonDeleteAll = $("<button class='deleteAll'>Delete all</button>").click(function() {
                 mapContent.deleteAllPolygons();
             });
-            $(this).append($nav.append(buttonAdd,buttonDelete,buttonDeleteAll));
+            var buttonImport = $("<button class='import'>Import</button>").click(function() {
+                //mapContent.deleteAllPolygons();
+            });
+            var buttonExport = $("<button class='export'>Export</button>").click(function() {
+                mapContent.exportToJSON();
+            });
+            var $textarea = $("<textarea class='polygons'></textarea>");
+            $(this).append($nav.append(buttonAdd,buttonDelete,buttonDeleteAll,buttonImport,buttonExport,$textarea));
         });
         return this;
     };
 })( jQuery );
 $(document).ready(function(){
-    $('div.map').initMap();
+    $('div.map').initGoogleMap();
 });

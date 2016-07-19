@@ -28,6 +28,11 @@ function MapContent(mapContainer){
     _this.deleteAllPolygons = function(){
         polygonsContainer.deleteAllPolygons();
     };
+    _this.exportToJSON = function(){
+        var polygonsMarkers = polygonsContainer.export();
+        var polygonsJson = buildPolygonsJSON(polygonsMarkers);
+        $(mapContainer).children("nav").children("textarea.polygons").val(polygonsJson);
+    };
     var addMarkerEventListener = function(){
         markerEventListener = google.maps.event.addListener(_this.map, 'click', function(event) {
             polygonsContainer.addMarker(event.latLng, _this.map);
@@ -54,4 +59,15 @@ function MapContent(mapContainer){
             handleLocationError(false, _this.infoWindow, _this.map.getCenter());
         }
     };
+    var buildPolygonsJSON = function(polygonsMarkers){
+        var PolygonsJSON = '{ "polygons" : [';
+        polygonsMarkers.forEach(function(polygonMarkers, number, polygons){
+            if(number > 0){
+                PolygonsJSON += ",";
+            }
+            PolygonsJSON += '{"markers": [' + polygonMarkers + ']}';
+        });
+        PolygonsJSON += ']}';
+        return PolygonsJSON;
+    }
 }

@@ -85,4 +85,16 @@ function PolygonsContainer(){
         removeMarkers();
         return coords;
     };
+    _this.export = function(){
+        var allMarkers = [];
+        _this.all.forEach(function(polygon,number,polygons){
+            var polygonMarkers = [];
+            polygon.getPaths().getArray()[0].getArray().forEach(function(point, number, points){
+                polygonMarkers.push(new Marker(point));
+            });
+            allMarkers.push(polygonMarkers);
+        });
+        debugger;
+        return allMarkers;
+    };
 }
