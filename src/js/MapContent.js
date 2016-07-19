@@ -1,13 +1,12 @@
-function MapContent(){
+function MapContent(mapContainer){
     var _this = this;
+    var mapContainer = mapContainer;
     _this.map;
     _this.infoWindow;
     var polygonsContainer = new PolygonsContainer();
-
     var markerEventListener = null;
-
     _this.initMap = function(){
-        this.map = new google.maps.Map($("#map")[0], {
+        this.map = new google.maps.Map(mapContainer, {
             center: {lat: -34.397, lng: 150.644},
             zoom: 10
         });
