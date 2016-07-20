@@ -25,6 +25,7 @@
         return this;
     };
 })( jQuery );
+
 $(document).ready(function(){
-    $('div.map').initGoogleMap();
+    $('div').initGoogleMap();
 });
