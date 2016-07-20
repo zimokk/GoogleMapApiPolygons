@@ -34,11 +34,21 @@ function MapContent(mapContainer){
         $(mapContainer).children("nav").children("textarea.polygons").val(JSON.stringify(polygonsMarkers));
     };
     _this.importPolygons = function(){
-        _this.deleteAllPolygons();
         var inputJSON = $(mapContainer).children("nav").children("textarea.polygons").val();
-        var polygonsMarkersArray = JSON.parse(inputJSON);
-        if(polygonsMarkersArray.length > 0){
-            polygonsContainer.import(polygonsMarkersArray, _this.map);
+        var data;
+        var polygonsMarkersArray;
+        try
+        {
+            polygonsMarkersArray = JSON.parse(inputJSON);
+            if(polygonsMarkersArray.length > 0){
+                _this.deleteAllPolygons();
+                polygonsContainer.import(polygonsMarkersArray, _this.map);
+            }
+        }
+        catch(error)
+        {
+            console.log("Error in the json data");
+            console.log(error);
         }
     };
     var addMarkerEventListener = function(){

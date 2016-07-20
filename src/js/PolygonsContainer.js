@@ -11,7 +11,7 @@ function PolygonsContainer(){
         _this.markers.push(marker);
     };
     _this.setPolygon = function(map){
-        var coords = buildCoordsArray();
+        var coords = buildCoordsArray(_this.markers);
         var polygon = createPolygon(coords,map);
         if(polygon){
             _this.all.push(polygon);
@@ -55,6 +55,7 @@ function PolygonsContainer(){
     };
     var createPolygon = function(markersArray,map){
         if(markersArray.length >= 3) {
+            markersArray = buildConvexHull(markersArray);
             var polygon = new google.maps.Polygon({
                 paths: markersArray,
                 strokeColor: 'limegreen',
@@ -99,15 +100,34 @@ function PolygonsContainer(){
         });
         _this.markers = [];
     };
-    var buildCoordsArray = function(){
+    var buildCoordsArray = function(pointsArray){
         var coords = [];
-        _this.markers.forEach(function(marker, number, markers){
-            coords.push({
-               lat:marker.internalPosition.lat(),
-               lng:marker.internalPosition.lng()
+        if(pointsArray.length >= 3){
+            pointsArray.forEach(function(point, number, markers){
+                coords.push({
+                    lat:point.internalPosition.lat(),
+                    lng:point.internalPosition.lng()
+                });
             });
-        });
-        removeMarkers();
+            coords = buildConvexHull(coords);
+            removeMarkers();
+        }
         return coords;
     };
+    var buildConvexHull = function(pointsArray){
+        var convexHull = new ConvexHullGrahamScan();
+        var hullPoints;
+        var coords = [];
+        pointsArray.forEach(function(point, number, markers){
+            convexHull.addPoint(point.lat, point.lng);
+        });
+        hullPoints = convexHull.getHull();
+        hullPoints.forEach(function(point, number, markers){
+            coords.push({
+                lat:point.x,
+                lng:point.y
+            });
+        });
+        return coords;
+    }
 }
