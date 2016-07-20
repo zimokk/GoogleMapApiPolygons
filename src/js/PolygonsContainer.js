@@ -10,21 +10,10 @@ function PolygonsContainer(){
         });
         _this.markers.push(marker);
     };
-    _this.createPolygon = function(map){
-        if(_this.markers.length >= 3){
-            var coords = buildCoordsArray();
-            var polygon = new google.maps.Polygon({
-                paths: coords,
-                strokeColor: 'limegreen',
-                strokeOpacity: 0.8,
-                strokeWeight: 3,
-                fillColor: 'greenyellow',
-                fillOpacity: 0.35,
-                draggable: true,
-                geodesic: true
-            });
-            polygon.addListener('click', toggleActivity);
-            polygon.setMap(map);
+    _this.setPolygon = function(map){
+        var coords = buildCoordsArray();
+        var polygon = createPolygon(coords,map);
+        if(polygon){
             _this.all.push(polygon);
         }
     };
@@ -44,6 +33,42 @@ function PolygonsContainer(){
         });
         _this.all = [];
         _this.active = null;
+    };
+    _this.export = function(){
+        var allMarkers = [];
+        _this.all.forEach(function(polygon,number,polygons){
+            var polygonMarkers = [];
+            polygon.getPaths().getArray()[0].getArray().forEach(function(point, number, points){
+                polygonMarkers.push(point);
+            });
+            allMarkers.push(polygonMarkers);
+        });
+        return allMarkers;
+    };
+    _this.import = function(polygonsMarkersArray, map){
+        polygonsMarkersArray.forEach(function(markersArray, number, polygons){
+            var polygon = createPolygon(markersArray,map);
+            if(polygon){
+                _this.all.push(polygon);
+            }
+        });
+    };
+    var createPolygon = function(markersArray,map){
+        if(markersArray.length >= 3) {
+            var polygon = new google.maps.Polygon({
+                paths: markersArray,
+                strokeColor: 'limegreen',
+                strokeOpacity: 0.8,
+                strokeWeight: 3,
+                fillColor: 'greenyellow',
+                fillOpacity: 0.35,
+                draggable: true,
+                geodesic: true
+            });
+            polygon.addListener('click', toggleActivity);
+            polygon.setMap(map);
+            return polygon;
+        }
     };
     var toggleActivity = function(){
         var unsetActive = function(){
@@ -84,17 +109,5 @@ function PolygonsContainer(){
         });
         removeMarkers();
         return coords;
-    };
-    _this.export = function(){
-        var allMarkers = [];
-        _this.all.forEach(function(polygon,number,polygons){
-            var polygonMarkers = [];
-            polygon.getPaths().getArray()[0].getArray().forEach(function(point, number, points){
-                polygonMarkers.push(new Marker(point));
-            });
-            allMarkers.push(polygonMarkers);
-        });
-        debugger;
-        return allMarkers;
     };
 }

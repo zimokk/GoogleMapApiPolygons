@@ -14,7 +14,7 @@
                 mapContent.deleteAllPolygons();
             });
             var buttonImport = $("<button class='import'>Import</button>").click(function() {
-                //mapContent.deleteAllPolygons();
+                mapContent.importPolygons();
             });
             var buttonExport = $("<button class='export'>Export</button>").click(function() {
                 mapContent.exportToJSON();

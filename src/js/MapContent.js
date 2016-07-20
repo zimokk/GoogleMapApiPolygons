@@ -19,7 +19,7 @@ function MapContent(mapContainer){
         }
         else{
             removeMarkerEventListener();
-            polygonsContainer.createPolygon(_this.map);
+            polygonsContainer.setPolygon(_this.map);
         }
     };
     _this.deletePolygon = function(){
@@ -30,8 +30,16 @@ function MapContent(mapContainer){
     };
     _this.exportToJSON = function(){
         var polygonsMarkers = polygonsContainer.export();
-        var polygonsJson = buildPolygonsJSON(polygonsMarkers);
-        $(mapContainer).children("nav").children("textarea.polygons").val(polygonsJson);
+        var polygonsJson = JSON.stringify(polygonsMarkers);
+        $(mapContainer).children("nav").children("textarea.polygons").val(JSON.stringify(polygonsMarkers));
+    };
+    _this.importPolygons = function(){
+        _this.deleteAllPolygons();
+        var inputJSON = $(mapContainer).children("nav").children("textarea.polygons").val();
+        var polygonsMarkersArray = JSON.parse(inputJSON);
+        if(polygonsMarkersArray.length > 0){
+            polygonsContainer.import(polygonsMarkersArray, _this.map);
+        }
     };
     var addMarkerEventListener = function(){
         markerEventListener = google.maps.event.addListener(_this.map, 'click', function(event) {
@@ -59,15 +67,4 @@ function MapContent(mapContainer){
             handleLocationError(false, _this.infoWindow, _this.map.getCenter());
         }
     };
-    var buildPolygonsJSON = function(polygonsMarkers){
-        var PolygonsJSON = '{ "polygons" : [';
-        polygonsMarkers.forEach(function(polygonMarkers, number, polygons){
-            if(number > 0){
-                PolygonsJSON += ",";
-            }
-            PolygonsJSON += '{"markers": [' + polygonMarkers + ']}';
-        });
-        PolygonsJSON += ']}';
-        return PolygonsJSON;
-    }
 }
